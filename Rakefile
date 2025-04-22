@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copyright (c) 2025 Kk
 #
 # This software is released under the MIT License.
