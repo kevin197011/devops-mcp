@@ -19,3 +19,7 @@ end
 task :pull do
   system 'git pull'
 end
+
+task :run do
+  system 'uv run main.py'
+end
