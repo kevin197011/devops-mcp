@@ -1,18 +1,31 @@
 """
-MCP Website Fetcher Server - Consolidated Implementation
+MCP Prometheus Server - Consolidated Implementation
 
 Combines all functionality in a single file with clearly separated components.
 """
 
 # import anyio
 import httpx
+from dataclasses import dataclass
 from typing import List, Union
 from mcp.server.lowlevel import Server
 import mcp.types as types
 from mcp.server.sse import SseServerTransport
+from mcp.server.fastmcp import FastMCP
 import uvicorn
 from starlette.applications import Starlette
 from starlette.routing import Mount, Route
+
+mcp = FastMCP("devops-mcp")
+
+@dataclass
+class ServerConfig:
+    """Configuration for prometheus server"""
+    url: str = "http://localhost:9090"
+
+config = ServerConfig(
+    url="http://localhost:9090"
+)
 
 # ======================
 # Core Business Logic
@@ -29,7 +42,7 @@ def create_http_client() -> httpx.AsyncClient:
     )
 
 
-async def fetch_website_content(url: str, client: httpx.AsyncClient) -> str:
+async def httpx_get(url: str, client: httpx.AsyncClient) -> str:
     """Pure function to fetch raw website content"""
     response = await client.get(url)
     response.raise_for_status()
@@ -72,7 +85,19 @@ async def handle_fetch_tool(name: str, arguments: dict) -> List[types.TextConten
         raise ValueError("Missing required argument 'url'")
 
     async with create_http_client() as client:
-        content = await fetch_website_content(arguments["url"], client)
+        content = await httpx_get(arguments["url"], client)
+        return create_content_response(content)
+
+@mcp.tool(description="List all available metrics in Prometheus")
+async def list_metrics() -> List[str]:
+    """Retrieve a list of all metric names available in Prometheus.
+
+    Returns:
+        List of metric names as strings
+    """
+    url = f"{config.url}/api/v1/label/__name__/values"
+    async with create_http_client() as client:
+        content = await httpx_get(url, client)
         return create_content_response(content)
 
 
@@ -86,7 +111,7 @@ async def handle_list_tools() -> List[types.Tool]:
 # ======================
 
 
-def create_mcp_server(name: str = "mcp-website-fetcher") -> Server:
+def create_mcp_server(name: str = "mdevops-mcp") -> Server:
     """Initialize and configure MCP server with tools"""
     server = Server(name)
 
