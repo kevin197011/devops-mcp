@@ -1,6 +1,5 @@
 import json
 import httpx
-import requests
 from fastmcp import FastMCP
 from mcp.types import TextContent
 from typing import List
@@ -15,7 +14,7 @@ PROM_URL = os.getenv("PROM_URL", "http://localhost:9090")
 
 # Tool 1: Hello test
 @mcp.tool()
-def greet(name: str) -> str:
+async def greet(name: str) -> str:
     """Greet a user by name."""
     return f"Hello, {name}!"
 
@@ -36,9 +35,9 @@ async def list_metrics() -> List[TextContent]:
     except Exception as e:
         return [TextContent(type="text", text=f"Unexpected Error: {str(e)}")]
 
-# Tool 3: Synchronous Prometheus metrics query (using requests)
-@mcp.tool(description="Sync query of prometheus metrics for last 5 minutes")
-def get_prometheus_metrics_sync(metric: str) -> List[TextContent]:
+# Tool 3: Asynchronous Prometheus metrics query
+@mcp.tool(description="Async query of prometheus metrics for last 5 minutes")
+async def get_prometheus_metrics_async(metric: str) -> List[TextContent]:
     """
     Query specified prometheus metric for last 5 minutes and return raw data
 
@@ -62,27 +61,28 @@ def get_prometheus_metrics_sync(metric: str) -> List[TextContent]:
 
     try:
         # Execute the request
-        resp = requests.get(url, params=params, timeout=10.0)
-        resp.raise_for_status()
-        data = resp.json()
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.get(url, params=params)
+            resp.raise_for_status()
+            data = resp.json()
 
-        # Handle response
-        if data.get("status") == "success":
-            return [TextContent(
-                type="text",
-                text=json.dumps(data["data"], indent=2)
-            )]
-        else:
-            error_type = data.get("errorType", "Unknown errorType")
-            error_message = data.get("error", "Unknown error")
-            return [TextContent(
-                type="text",
-                text=f"Prometheus Error ({error_type}): {error_message}"
-            )]
+            # Handle response
+            if data.get("status") == "success":
+                return [TextContent(
+                    type="text",
+                    text=json.dumps(data["data"], indent=2)
+                )]
+            else:
+                error_type = data.get("errorType", "Unknown errorType")
+                error_message = data.get("error", "Unknown error")
+                return [TextContent(
+                    type="text",
+                    text=f"Prometheus Error ({error_type}): {error_message}"
+                )]
 
-    except requests.exceptions.HTTPError as e:
+    except httpx.HTTPStatusError as e:
         return [TextContent(type="text", text=f"HTTP Error: {str(e)}")]
-    except requests.exceptions.RequestException as e:
+    except httpx.RequestError as e:
         return [TextContent(type="text", text=f"Request Error: {str(e)}")]
     except Exception as e:
         return [TextContent(type="text", text=f"Unexpected Error: {str(e)}")]
