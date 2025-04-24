@@ -194,6 +194,7 @@ dependencies = [
     { name = "httpx" },
     { name = "mcp" },
     { name = "prometheus-api-client" },
+    { name = "requests" },
 ]
 
 [package.metadata]
@@ -202,6 +203,7 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "mcp", specifier = ">=1.6.0" },
     { name = "prometheus-api-client", specifier = ">=0.6.0" },
+    { name = "requests", specifier = ">=2.32.3" },
 ]
 
 [[package]]
