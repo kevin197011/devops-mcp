@@ -5,10 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "fastmcp",
-    "httpx>=0.28.1",
-    "mcp>=1.6.0",
-    "prometheus-api-client>=0.6.0",
+    "mcp[cli]",
     "requests>=2.32.3",
 ]
 

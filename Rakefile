@@ -7,7 +7,7 @@
 
 require 'time'
 
-task default: %w[push]
+task default: %w[fmt push]
 
 task :push do
   system 'git add .'
@@ -22,4 +22,8 @@ end
 
 task :run do
   system 'uv run main.py'
+end
+
+task :fmt do
+  system 'ruff format .'
 end
