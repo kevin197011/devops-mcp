@@ -5,6 +5,11 @@
 
 from mcp.server.fastmcp import FastMCP
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+prom_url = os.getenv("PROM_URL", "http://localhost:9090")
 
 
 def devops_register_tools(mcp: FastMCP):
@@ -18,4 +23,4 @@ def devops_register_tools(mcp: FastMCP):
     @mcp.tool(description="print url")
     async def prom_debug() -> str:
         """Debug Prometheus URL"""
-        return os.getenv("PROM_URL", "http://localhost:9090")
+        return prom_url

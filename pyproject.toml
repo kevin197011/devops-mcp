@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "mcp[cli]",
+    "python-dotenv>=1.1.0",
     "requests>=2.32.3",
 ]
 
