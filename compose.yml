@@ -1,0 +1,12 @@
+services:
+  devops-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PROM_URL=http://prometheus:9090
+    volumes:
+      - .:/app
+
