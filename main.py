@@ -4,10 +4,12 @@
 # https://opensource.org/licenses/MIT
 
 from mcp.server.fastmcp import FastMCP
-from tools.devops import devops_register_tools
+from tools.devops import register_devops_tools
+from tools.prometheus import register_prometheus_tools
 
 mcp = FastMCP(name="DevOps-MCP", host="0.0.0.0", port=8000)
-devops_register_tools(mcp)
+register_devops_tools(mcp)
+register_prometheus_tools(mcp)
 
 if __name__ == "__main__":
     try:
