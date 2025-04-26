@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-mcp
+  namespace: devops
+  labels:
+    app: devops-mcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-mcp
+  template:
+    metadata:
+      labels:
+        app: devops-mcp
+    spec:
+      containers:
+        - name: devops-mcp
+          image: devops-mcp:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PROM_URL
+              value: "http://prometheus:9090"
+          volumeMounts:
+            - name: app-volume
+              mountPath: /app
+      volumes:
+        - name: app-volume
+          hostPath:
+            path: /app
