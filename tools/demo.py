@@ -12,7 +12,7 @@ load_dotenv()
 prom_url = os.getenv("PROM_URL", "http://192.168.1.5:9090")
 
 
-def register_devops_tools(mcp: FastMCP):
+def register_demo_tools(mcp: FastMCP):
     """注册工具到 MCP 实例"""
 
     @mcp.tool(description="hello a user by name")
