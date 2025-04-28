@@ -4,7 +4,7 @@
 # https://opensource.org/licenses/MIT
 
 from mcp.server.fastmcp import FastMCP
-from tools.devops import register_devops_tools
+from tools.demo import register_devops_tools
 from tools.prometheus import register_prometheus_tools
 
 mcp = FastMCP(name="DevOps-MCP", host="0.0.0.0", port=8000)
