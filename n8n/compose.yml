@@ -9,8 +9,14 @@ services:
       - "5678:5678" # 暴露 Web UI 和 API 端口
     volumes:
       - ./data:/home/node/.n8n # 持久化配置和工作流数据
-    #environment:
+    environment:
+      - N8N_PORT=5678 # 设置 n8n 端口
+      - N8N_HOST=localhost # 设置主机名
+      - N8N_PROTOCOL=http # 设置协议
+      - NODE_ENV=production # 设置 Node 环境为生产模式
+      - WEBHOOK_URL=https://localhost # Webhook URL（可选）
     # 可选环境变量（根据需要添加）
+    # - N8N_SECRET_COOKIE=false
     # - N8N_BASIC_AUTH_ACTIVE=true
     # - N8N_BASIC_AUTH_USER=user
     # - N8N_BASIC_AUTH_PASSWORD=secret
