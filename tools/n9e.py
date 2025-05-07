@@ -39,10 +39,18 @@ def register_n9e_tools(mcp: FastMCP):
         end = int(time.time())
         start = end - duration
         headers = {"Authorization": f"Bearer {token}"}
+        print(headers)
+        params = {
+            "p": 1,  # page number
+            "stime": start,
+            "etime": end,
+        }
+
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                f"{n9e_url}/api/n9e/alert-his-events/list?p=1&stime={start}&etime={end}",
+                f"{n9e_url}/api/n9e/alert-his-events/list",
                 headers=headers,
+                params=params,
             )
             response.raise_for_status()
             return response.json()
