@@ -39,7 +39,6 @@ def register_n9e_tools(mcp: FastMCP):
         end = int(time.time())
         start = end - duration
         headers = {"Authorization": f"Bearer {token}"}
-        print(headers)
         params = {
             "p": 1,  # page number
             "stime": start,
@@ -74,6 +73,7 @@ async def auth_token() -> str:
             response.raise_for_status()
             data = response.json()
             if data.get("err") == "":
+                print("N9E auth token:", data.get("dat").get("access_token"))
                 return data.get("dat").get("access_token")
             else:
                 return [f"Error: {data.get('err', 'Unknown error')}"]
