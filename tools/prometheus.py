@@ -12,7 +12,7 @@ from mcp.server.fastmcp import FastMCP
 
 load_dotenv()
 
-prom_url = os.getenv("PROM_URL", "http://192.168.1.5:9090")
+prom_url = os.getenv("PROM_URL", "http://localhost:9090")
 
 
 def register_prometheus_tools(mcp: FastMCP):

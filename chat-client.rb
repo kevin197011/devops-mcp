@@ -32,12 +32,11 @@ headers = {
 # 注意：这里应当把 cookie 内容处理成一行字符串（如上方），建议仅保留必要的 cookie 项目
 
 chat_input = <<~TEXT
-  查询prometheus的主机 cpu mem disk
+  查询prometheus的主机标签为 job="g20-uat-app" 的 disk使用情况
   - 查询当前1分钟以内的数据
-  - 标签为 job="node"
-  - 按照cpu mem disk整理为表格
+  - 按照主机 disk分区使用情况整理为表单输出
   - 基于当前查询出的数据给出分析，提示可能存在的风险和建议
-  - 反馈结果的风险用红色字体提示
+  - 反馈结果的风险加粗提示
 TEXT
 
 payload = {
